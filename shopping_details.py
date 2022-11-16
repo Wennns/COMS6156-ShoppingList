@@ -12,6 +12,10 @@ class Shop:
         pw = os.environ.get("DBPW")
         h = os.environ.get("DBHOST")
 
+        # usr = "root"
+        # pw = 'dbuserdbuser'
+        # h = 'localhost'
+
         conn = pymysql.connect(
             user=usr,
             password=pw,
@@ -19,11 +23,13 @@ class Shop:
             cursorclass=pymysql.cursors.DictCursor,
             autocommit=True
         )
+        # cur = conn.cursor()
+        # cur.execute("USE shopping_list")
         return conn
 
     @staticmethod
     def get_by_key(key):
-        sql = "SELECT * FROM XXX where guid=%s";
+        sql = "SELECT list_id, list.shopping_location, GROUP_CONCAT(DISTINCT product.product_name SEPARATOR ';') AS item_list FROM shopping_list.list JOIN shopping_list.product USING (list_id) GROUP BY list.list_id";
         conn = Shop._get_connection()
         cur = conn.cursor()
         res = cur.execute(sql, args=key)

@@ -2,6 +2,7 @@ from flask import Flask, Response, request
 from datetime import datetime
 import json
 from flask_cors import CORS
+from shopping_details import Shop
 
 # Create the Flask application object.
 app = Flask(__name__,
@@ -26,6 +27,19 @@ def get_health():
 
     return result
 
+
+# @app.route("/api/summary", methods=["GET"])
+@app.get("/api/summary")
+def get_student_by_uni():
+
+    result = Shop.get_by_key(None)
+
+    if result:
+        rsp = Response(json.dumps(result), status=200, content_type="application.json")
+    else:
+        rsp = Response("NOT FOUND", status=404, content_type="text/plain")
+
+    return rsp
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5011)
